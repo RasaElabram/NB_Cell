@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import os.path
 import subprocess
+from tkinter import messagebox
 
 _location = os.path.dirname(__file__)
 
@@ -66,23 +67,17 @@ class Toplevel1:
         self.Button2.configure(highlightcolor="white")
         self.Button2.configure(text='''Execute''')
 
-        # Progress bar
-        self.progressbar = ttk.Progressbar(self.top, orient=tk.HORIZONTAL, length=200, mode='indeterminate')
-
     def connect_to_database(self):
         print("Clicked")  # Check if button click event is captured
-        self.progressbar.place(relx=0.05, rely=0.2)  # Place the progress bar
-        self.progressbar.start()  # Start the progress bar animation
 
         try:
             script_path = os.path.join(_location, "..", "Database", "create_database.py")
             print("Script Path:", script_path)  # Print out the script path for verification
             subprocess.run(["python", script_path])
+            messagebox.showinfo("Database Updated", "Database has been successfully updated!")
         except Exception as e:
             print("Error:", e)  # Print out any exception messages for diagnosis
-
-        self.progressbar.stop()  # Stop the progress bar animation
-        self.progressbar.place_forget()  # Hide the progress bar
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 def main():
     root = tk.Tk()
